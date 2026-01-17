@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap");
+@import "tailwindcss";
+@plugin "@midudev/tailwind-animations";
+
+.font-fashion {
+  font-family: "Playfair Display", serif;
+}
+/* Add this to your CSS / Tailwind global file */
+.swiper-pagination-bullet {
+  background-color: black !important; /* makes bullets black */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: black !important; /* active bullet black too */
+}

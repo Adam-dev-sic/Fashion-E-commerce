@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+  // engineType: "library",
+
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+// This is your Prisma schema file
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql" // or "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
+// --------------------------------------
+// USER & AUTH
+// --------------------------------------
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String   // Remember to hash this!
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  cart      Cart?    @relation // One user has one active cart
+  favorites Product[] @relation("UserFavorites") // Explicit Many-to-Many
+}
+
+// --------------------------------------
+// PRODUCT
+// --------------------------------------
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String   @db.Text // Allows long text
+  brand       String
+  color       String
+  gender      String   // "Men", "Women", "Unisex"
+  quality     String?  // "100% POLYESTER"
+  madeIn      String?  // "Italy"
+  
+  // Pricing & Stats
+  price       Decimal  @db.Decimal(10, 2) // Stores 2184.00 correctly
+  discount    Int      @default(0) // Percentage, e.g., 20
+  salesCount  Int      @default(0) // To track popularity
+  seasonCode  String?  
+  shown       Boolean  @default(true) // For soft delete/hiding
+
+  // Assets
+  mainAngle   String   // "blouson.webp"
+  angle2      String?  
+  angle3      String?
+  angle4      String?
+
+  // Metadata
+  tags        String[] // Array of strings (Postgres feature)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  variants    ProductVariant[] // Links to size/quantity logic
+  favoritedBy User[]           @relation("UserFavorites")
+  cartItems   CartItem[]
+}
+
+// This handles your { s: 10, m: 10 } logic
+model ProductVariant {
+  id        String  @id @default(uuid())
+  size      String  // "S", "M", "XL"
+  stock     Int     @default(0)
+  
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  
+  @@unique([productId, size]) // Prevents having two "S" variants for the same product
+}
+
+// --------------------------------------
+// CART SYSTEM
+// --------------------------------------
+
+model Cart {
+  id        String     @id @default(uuid())
+  
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String     @unique // Ensures one cart per user
+  
+  items     CartItem[]
+  
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId    String
+
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+
+  // We save size here so we know WHICH version they bought
+  size      String   
+  quantity  Int      @default(1)
+
+  createdAt DateTime @default(now())
+}

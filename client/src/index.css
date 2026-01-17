@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "@midudev/tailwind-animations";
+.generalHover{
+transition-property: transform;
+transition-duration: 0.4s;
+}
+.generalHover:hover {
+  transform: scale(1.1);
+}
