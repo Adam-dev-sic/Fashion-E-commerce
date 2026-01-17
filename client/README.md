@@ -1,161 +1,135 @@
-import React from "react";
-import {
-  Sparkles,
-  ArrowUpRight,
-  ArrowRight,
-  Instagram,
-  Twitter,
-  Facebook,
-} from "lucide-react";
-export default function Footer() {
-  return (
-    <footer
-      className="
-    bg-neutral-950
-    border-t border-white/10 pt-16 pb-8 relative"
-    >
-      {/* <div className="fixed inset-0 opacity-20 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div> */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
-          {/* Left: Brand Identity & Address */}
-          <div className="lg:col-span-3 space-y-6">
-            <h2 className="text-2xl font-fashion font-bold tracking-tighter">
-              FASHIONIST.
-            </h2>
-            <p className="text-white/50 text-sm leading-relaxed">
-              Redefining modern luxury through curated collections and timeless
-              design logic.
-            </p>
-            <div className="flex space-x-4 pt-2">
-              <a
-                href="#"
-                className="text-white/40 hover:text-white transition-colors"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-white/40 hover:text-white transition-colors"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-white/40 hover:text-white transition-colors"
-              >
-                <Facebook size={20} />
-              </a>
-            </div>
-          </div>
+🛍️ Full-Stack Fashion E-Commerce Platform
 
-          {/* Middle: Navigation Links (Separated by Gray Lines on Desktop) */}
-          <div className="lg:col-span-5 grid grid-cols-2 gap-8 lg:border-l lg:border-white/10 lg:pl-12">
-            {/* Column 1 */}
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-6">
-                Client Services
-              </h4>
-              <ul className="space-y-4 text-sm text-white/60">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Shipping & Returns
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Track Order
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Size Guide
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Book an Appointment
-                  </a>
-                </li>
-              </ul>
-            </div>
+A modern, fully functional fashion e-commerce web application built with a React frontend, Node.js backend, and Supabase for authentication and database management.
+The project focuses on real-world e-commerce functionality, clean UI/UX, and scalability.
 
-            {/* Column 2 */}
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-6">
-                The Company
-              </h4>
-              <ul className="space-y-4 text-sm text-white/60">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Legal & Privacy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Sustainability
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
+🚀 Project Overview
 
-          {/* Right: Newsletter (Separated by Gray Line) */}
-          <div className="lg:col-span-4 lg:border-l lg:border-white/10 lg:pl-12 flex flex-col justify-between">
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
-                Newsletter
-              </h4>
-              <p className="text-white/50 text-sm mb-6">
-                Subscribe for exclusive access to new drops and private sales.
-              </p>
+This project is a complete fashion store platform featuring user authentication, product management, payments, and a flexible tagging system. It is designed to reflect how a real production e-commerce website works, both from a customer and an admin perspective.
 
-              <form className="space-y-4">
-                <div className="relative group">
-                  <input
-                    type="email"
-                    placeholder="Email address"
-                    className="w-full bg-transparent border-b border-white/30 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white transition-colors"
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="w-full bg-white text-black text-xs font-bold uppercase tracking-widest py-4 px-6 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group"
-                >
-                  <span>Subscribe</span>
-                  <ArrowRight
-                    size={16}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
+The application supports browsing, filtering, purchasing products, and managing user accounts, while providing admins with full control over products and tags.
 
-        {/* Bottom Bar */}
-        <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-white/30">
-          <p>&copy; 2024 Fashionist Group. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <span className="hover:text-white cursor-pointer">
-              Privacy Policy
-            </span>
-            <span className="hover:text-white cursor-pointer">
-              Terms of Service
-            </span>
-            <span className="hover:text-white cursor-pointer">
-              Cookies Settings
-            </span>
-          </div>
-        </div>
-    </footer>
-  );
-}
+✨ Key Features
+🧑‍💻 User Features
+
+Secure email-based authentication (sign up, login, logout)
+
+User profile/account page
+
+Fully functional shopping cart system
+
+Wishlist support
+
+Order history & checkout flow
+
+Responsive and modern UI design
+
+🛒 Products & Discovery
+
+Products categorized using a dynamic tag system
+
+Tags support:
+
+Brands
+
+Colors
+
+Gender
+
+Sales / discounts
+
+Custom categories
+
+Smart product sorting:
+
+Most popular products
+
+Latest products
+
+Ability to hide or display products dynamically
+
+Clean, fashion-oriented product presentation
+
+🧩 Tag System
+
+Fully configurable tag architecture
+
+Products can have multiple tags
+
+Tags are reusable and manageable from the admin panel
+
+Supports filtering products by multiple criteria
+
+🛠️ Admin Interface
+
+Admin dashboard for managing the store
+
+Add, edit, hide, or remove products
+
+Create, update, and delete tags
+
+Control product visibility without deleting data
+
+Designed for easy store customization
+
+💳 Payments
+
+Fully working payment system
+
+Secure checkout flow
+
+Orders stored and tracked in the database
+
+🗄️ Backend & Database
+
+Supabase-powered database
+
+Secure authentication with email/password
+
+Relational database structure for:
+
+Users
+
+Products
+
+Tags
+
+Carts
+
+Orders
+
+Server-side logic for cart totals and order creation
+
+🎨 Design & Customization
+
+Modern, clean fashion-store UI
+
+Fully responsive layout
+
+Easy to customize styles, products, and tags
+
+Built with scalability and maintainability in mind
+
+🧰 Tech Stack
+
+Frontend: React, Tailwind CSS
+
+Backend: Node.js, Express
+
+Database & Auth: Supabase
+
+Payments: Stripe / PayPal
+
+Deployment: Vercel (frontend) + Supabase (backend)
+
+📌 Purpose of the Project
+
+This project was built to:
+
+Practice real-world full-stack e-commerce architecture
+
+Implement authentication, payments, and admin tools
+
+Demonstrate clean code structure and UI/UX thinking
+
+Serve as a strong portfolio project for web development roles
