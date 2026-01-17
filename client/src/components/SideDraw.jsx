@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient"; // adjust path if needed
+import { apiFetch } from "../utils/api";
 
 export default function SideDrawer({ activeDrawer, setActiveDrawer, session }) {
   const navigate = useNavigate();
@@ -140,7 +141,9 @@ export default function SideDrawer({ activeDrawer, setActiveDrawer, session }) {
           return;
         }
 
-        const productIds = cartItemRows.map((r) => r.product_id).filter(Boolean);
+        const productIds = cartItemRows
+          .map((r) => r.product_id)
+          .filter(Boolean);
         if (productIds.length === 0) {
           if (mounted) setCartItems([]);
           return;
@@ -186,7 +189,10 @@ export default function SideDrawer({ activeDrawer, setActiveDrawer, session }) {
               );
             }
           } catch (delErr) {
-            console.error("Error deleting cart items for not-shown products", delErr);
+            console.error(
+              "Error deleting cart items for not-shown products",
+              delErr
+            );
           }
         }
 
@@ -311,15 +317,14 @@ export default function SideDrawer({ activeDrawer, setActiveDrawer, session }) {
       setResults([]);
       return;
     }
+    
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/products?search=${encodeURIComponent(
-            searchTerm.trim()
-          )}`
+        const res = await apiFetch(
+          `/api/products?search=${encodeURIComponent(searchTerm.trim())}`
         );
         const data = await res.json();
         setResults(Array.isArray(data) ? data : []);
@@ -393,7 +398,9 @@ export default function SideDrawer({ activeDrawer, setActiveDrawer, session }) {
 
       if (favErr) throw favErr;
 
-      const productIds = (favRows || []).map((r) => r.product_id).filter(Boolean);
+      const productIds = (favRows || [])
+        .map((r) => r.product_id)
+        .filter(Boolean);
       if (productIds.length === 0) {
         setWishlist([]);
         setWishlistLoading(false);
@@ -789,10 +796,14 @@ export default function SideDrawer({ activeDrawer, setActiveDrawer, session }) {
                 {wishlistLoading && (
                   <p className="text-gray-500">Loading wishlist...</p>
                 )}
-                {wishlistError && <p className="text-red-500">{wishlistError}</p>}
+                {wishlistError && (
+                  <p className="text-red-500">{wishlistError}</p>
+                )}
 
                 {!wishlistLoading && wishlist.length === 0 && (
-                  <div className="text-gray-500">No items in your wishlist yet.</div>
+                  <div className="text-gray-500">
+                    No items in your wishlist yet.
+                  </div>
                 )}
 
                 <div className="space-y-3">

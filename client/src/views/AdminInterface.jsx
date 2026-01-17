@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { supabase } from "../supabaseClient";
 import { useOutletContext } from "react-router-dom";
+import { apiFetch } from "../utils/api";
 
-const API_URL = "http://localhost:3000/api/products";
 
 export default function AdminInterface() {
   const [products, setProducts] = useState([]);
@@ -107,7 +107,7 @@ export default function AdminInterface() {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(API_URL, {
+      const res = await apiFetch("/api/products", {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -121,7 +121,7 @@ export default function AdminInterface() {
       setIsLoading(false);
     }
   };
-console.log(products[0]?.product_variants);
+  console.log(products[0]?.product_variants);
   // fetch categories / brands / colors / sizes from Supabase
   const fetchTagLists = async () => {
     try {
@@ -189,7 +189,7 @@ console.log(products[0]?.product_variants);
   };
 
   // useEffect(() => {
-    // console.log(product.product_variants);
+  // console.log(product.product_variants);
   // }, [products]);
 
   // Handle File Selection
@@ -227,7 +227,7 @@ console.log(products[0]?.product_variants);
       angle3: null,
       angle4: null,
     });
-console.log(product)
+    console.log(product);
     const qtyMap = { xs: 0, s: 0, m: 0, l: 0, xl: 0, xxl: 0 };
     if (product.product_variants) {
       product.product_variants.forEach((v) => {
@@ -235,7 +235,7 @@ console.log(product)
         if (qtyMap.hasOwnProperty(key)) qtyMap[key] = v.stock;
       });
     }
-// console.log(product.product_variants);
+    // console.log(product.product_variants);
     setFormData({
       name: product.name ?? "",
       brand: product.brand ?? "",
@@ -278,7 +278,7 @@ console.log(product)
     if (!window.confirm("Are you sure you want to delete this product?"))
       return;
     try {
-      await fetch(`${API_URL}/${id}`, {
+      await apiFetch(`/api/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
@@ -360,7 +360,7 @@ console.log(product)
 
       // 3. Send to Backend
       if (isEditing) {
-        await fetch(`${API_URL}/${isEditing}`, {
+        await apiFetch(`/api/products/${isEditing}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${session.access_token}`,
@@ -370,7 +370,7 @@ console.log(product)
         });
         fetchProducts();
       } else {
-        const res = await fetch(`${API_URL}/add`, {
+        const res = await apiFetch(`/api/products/add`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${session.access_token}`,

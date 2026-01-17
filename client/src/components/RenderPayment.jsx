@@ -15,6 +15,7 @@ import { supabase } from "../supabaseClient";
 import { useOutletContext } from "react-router-dom";
 import { useEffect } from "react";
 import { use } from "react";
+import { apiFetch } from "../utils/api";
 
 /**
  * NOTE:
@@ -46,22 +47,19 @@ function StripeForm({
       setProcessing(true);
 
       // 1) Ask backend to create PaymentIntent and return clientSecret
-      const resp = await fetch(
-        "http://localhost:3000/api/create-payment-intent",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`, // or cookie
-          },
-          body: JSON.stringify({
-            // amount: amountCents,
-            formData: formData,
-            // integer cents, server should validate
-            // optional metadata: items, userId, etc.
-          }),
-        }
-      );
+      const resp = await apiFetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`, // or cookie
+        },
+        body: JSON.stringify({
+          // amount: amountCents,
+          formData: formData,
+          // integer cents, server should validate
+          // optional metadata: items, userId, etc.
+        }),
+      });
 
       if (!resp.ok) throw new Error("Failed to create payment intent");
       const { clientSecret } = await resp.json();
@@ -158,26 +156,22 @@ export default function RenderPayment({
   const [errorMsg, setErrorMsg] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
 
- 
   // Card success handler
   const handleCardSuccess = async (paymentIntent) => {
-    const resp = await fetch(
-      "http://localhost:3000/api/capture-payment-intent",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`, // or cookie
-        },
-        body: JSON.stringify({
-          // amount: amountCents,
-          formData: formData,
-          paymentIntentId: paymentIntent.id,
-          // integer cents, server should validate
-          // optional metadata: items, userId, etc.
-        }),
-      }
-    );
+    const resp = await apiFetch("api/capture-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`, // or cookie
+      },
+      body: JSON.stringify({
+        // amount: amountCents,
+        formData: formData,
+        paymentIntentId: paymentIntent.id,
+        // integer cents, server should validate
+        // optional metadata: items, userId, etc.
+      }),
+    });
 
     nextStep(); // move to completion step (parent will show success view)
   };
@@ -193,20 +187,17 @@ export default function RenderPayment({
     try {
       setErrorMsg(null);
       setProcessing(true);
-      const resp = await fetch(
-        "http://localhost:3000/api/paypal/create-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`, // or cookie
-          },
-          body: JSON.stringify({
-            // amount or items — server must calculate amount
-            // For security: server should compute the amount from cart / user session
-          }),
-        }
-      );
+      const resp = await apiFetch("/api/paypal/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`, // or cookie
+        },
+        body: JSON.stringify({
+          // amount or items — server must calculate amount
+          // For security: server should compute the amount from cart / user session
+        }),
+      });
       if (!resp.ok) throw new Error("Failed to create PayPal order");
       const body = await resp.json();
       return body.orderID;
@@ -222,17 +213,14 @@ export default function RenderPayment({
     try {
       setErrorMsg(null);
       // capture on server
-      const resp = await fetch(
-        "http://localhost:3000/api/paypal/capture-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`, // or cookie
-          },
-          body: JSON.stringify({ orderID: data.orderID, formData }),
-        }
-      );
+      const resp = await apiFetch("/api/paypal/capture-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`, // or cookie
+        },
+        body: JSON.stringify({ orderID: data.orderID, formData }),
+      });
       if (!resp.ok) throw new Error("Failed to capture PayPal order");
       const capture = await resp.json();
       // Optionally: record order in your DB using capture response

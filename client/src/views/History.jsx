@@ -13,6 +13,7 @@ import {
   TruckIcon,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { apiFetch } from "../utils/api";
 
 function History() {
   const session = useOutletContext();
@@ -111,7 +112,7 @@ function History() {
     setCancelingIds((prev) => new Set(prev).add(orderId));
 
     try {
-      const res = await fetch("http://localhost:3000/api/orders/cancel", {
+      const res = await apiFetch("/api/orders/cancel", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -263,7 +264,8 @@ function History() {
                     Order : #{order.id}
                   </p>
                   <p className="font-medium text-lg leading-8 text-black mt-3 break-all max-w-full">
-                    Ordered at : {new Date(order.created_at).toLocaleDateString()}
+                    Ordered at :{" "}
+                    {new Date(order.created_at).toLocaleDateString()}
                   </p>
                 </div>
                 <div>
@@ -404,7 +406,9 @@ function History() {
                             </p>
                             {order.status === "Delivered" ? (
                               <p className="font-semibold text-lg leading-8 text-black text-left whitespace-nowrap">
-                                {new Date(order.updated_at).toLocaleDateString()}
+                                {new Date(
+                                  order.updated_at
+                                ).toLocaleDateString()}
                               </p>
                             ) : (
                               <p className="font-semibold text-lg leading-8 text-black text-left whitespace-nowrap">

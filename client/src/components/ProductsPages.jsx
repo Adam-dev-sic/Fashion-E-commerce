@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { Link, useNavigate, useOutletContext } from "react-router-dom"; // Optional: if you want to link to product details
+import { apiFetch } from "../utils/api";
 
 export default function ProductsPages({ pageSize = 24, searchParams }) {
   // 1. State for data, loading, and errors
@@ -25,8 +26,8 @@ export default function ProductsPages({ pageSize = 24, searchParams }) {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/products?${searchParams?.toString()}`,
+        const response = await apiFetch(
+          `/api/products?${searchParams?.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${session?.access_token || ""}`,
@@ -109,14 +110,20 @@ export default function ProductsPages({ pageSize = 24, searchParams }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-8">
           {pageItems.map((product) => {
             const rawPrice = Number(product.price ?? 0);
-            const discountPercent = Number(product.discount ?? product.raw_discount ?? 0);
+            const discountPercent = Number(
+              product.discount ?? product.raw_discount ?? 0
+            );
             const hasDiscount = !isNaN(discountPercent) && discountPercent > 0;
             const discountedPrice = rawPrice * (1 - discountPercent / 100);
 
             const imgSrc = getImage(product);
 
             return (
-              <Link key={product.id} to={`/product/${product.id}`} aria-label={`View ${product.name}`}>
+              <Link
+                key={product.id}
+                to={`/product/${product.id}`}
+                aria-label={`View ${product.name}`}
+              >
                 <article
                   className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition p-3 h-full flex flex-col"
                   role="group"
@@ -129,7 +136,8 @@ export default function ProductsPages({ pageSize = 24, searchParams }) {
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = "https://via.placeholder.com/400?text=No+Image";
+                        e.currentTarget.src =
+                          "https://via.placeholder.com/400?text=No+Image";
                       }}
                     />
                   </div>
@@ -137,8 +145,12 @@ export default function ProductsPages({ pageSize = 24, searchParams }) {
                   {/* Details */}
                   <div className="mt-3 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-semibold text-base line-clamp-2">{product.name}</h3>
-                      <p className="text-sm text-gray-500 mt-1">{product.brand}</p>
+                      <h3 className="font-semibold text-base line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {product.brand}
+                      </p>
                     </div>
 
                     {/* Pricing */}
@@ -153,7 +165,9 @@ export default function ProductsPages({ pageSize = 24, searchParams }) {
                           </span>
                         </div>
                       ) : (
-                        <p className="text-lg text-red-600 font-semibold">${rawPrice.toFixed(2)}</p>
+                        <p className="text-lg text-red-600 font-semibold">
+                          ${rawPrice.toFixed(2)}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -183,7 +197,9 @@ export default function ProductsPages({ pageSize = 24, searchParams }) {
             />
           </div>
         ) : (
-          <div className="text-center mt-10 text-gray-500">No products found.</div>
+          <div className="text-center mt-10 text-gray-500">
+            No products found.
+          </div>
         )}
       </div>
     </>
