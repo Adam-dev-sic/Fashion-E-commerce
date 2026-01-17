@@ -37,7 +37,7 @@ if (inProd) {
   // Make sure you build your frontend into client/dist (or client/build)
   const __dirname = path.resolve();
   // prefer dist, fallback to build
-  const frontendPath = path.join(__dirname, "client", "dist"); // or "client/build" depending on your bundler
+  const frontendPath = path.join(__dirname, "../client", "dist"); // or "client/build" depending on your bundler
 
   app.use(express.static(frontendPath, { maxAge: "1d" }));
 
